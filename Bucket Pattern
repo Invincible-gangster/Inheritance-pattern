@@ -1,0 +1,67 @@
+{
+  "id": {
+    "book_id": 1,
+    "month": {
+      "$date": "2023-11-22T00:00:00.000Z"
+    }
+  }
+}
+
+{
+  "id": {
+    "book_id": 1,
+    "month": {
+      "$date": "2023-11-22T00:00:00.000Z"
+    }
+  },
+  "views": [
+    {
+      "user_id": "user00",
+      "timestamp": {
+        "$date": "2023-11-22T00:00:00.000Z"
+      }
+    },
+    {
+      "user_id": "user10",
+      "timestamp": {
+        "$date": "2023-11-22T00:01:00.000Z"
+      }
+    },
+  ]
+}
+
+{
+   "book_id": 34538756,
+   "timestamp": {
+       "$date": "2023-09-29T08:23:13Z"
+   },
+   "user_id": 271828
+}
+
+[
+   {
+       $group: {
+           _id: {
+               book_id: "$book_id",
+               month: {
+                   $dateFromParts: {
+                       year: { $year: "$timestamp" },
+                       month: { $month: "$timestamp" },
+                       day: 1,
+                   },
+               },
+           },
+           views: {
+               $push: {
+                   user_id: "$user_id",
+                   timestamp: "$timestamp",
+               },
+           },
+       },
+   },
+   {
+       $set: {
+           views_count: { $size: "$views" },
+       },
+   }
+]
