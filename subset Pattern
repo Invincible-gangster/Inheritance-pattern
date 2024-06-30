@@ -1,0 +1,28 @@
+[
+  {
+    $unwind: {
+      path: "$reviews"
+    }
+  },
+  {
+    $set: {
+      "reviews.product_id": "$product_id"
+    }
+  },
+  {
+    $replaceRoot: {
+      newRoot: "$reviews"
+    }
+  },
+  {
+    $out: "reviews"
+  }
+
+   {
+       reviews: {
+           $slice: ["$reviews", 3]
+       }
+   }
+];
+
+db.books.updateMany({}, update_reviews_array_pipeline);
